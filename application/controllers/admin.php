@@ -8,7 +8,7 @@ class admin extends MY_Controller
 	
 	function index()
 	{
-		$this->load->view('admin/login');
+		$this->load_template('backend/admin/login', $this->data);
 	}
 	
 	function login_submit()
@@ -24,10 +24,13 @@ class admin extends MY_Controller
 		$this->form_validation->set_rules('username','Username','required');
 		$this->form_validation->set_rules('password','Password','required|callback_verify_user');
 		
+		$this->form_validation->set_error_delimiters('<p class="error">','</p>');
 		
 		if($this->form_validation->run() == false)
 		{
-			$this->load->view('admin/login');
+			$this->data['has_error'] = true;
+			
+			$this->load_template('backend/admin/login', $this->data);	
 		}
 		else
 		{
@@ -53,7 +56,7 @@ class admin extends MY_Controller
 			
 			$row = $query->row();
 			
-			if($this->password->check_password($password.$row->salt, $row->password))
+			if($this->password->check_password($this->input->post('password').$row->salt, $row->password))
 			{
 				// set session
 				

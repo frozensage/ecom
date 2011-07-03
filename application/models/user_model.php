@@ -1,8 +1,6 @@
 <?php
 class user_model extends MY_Model
-{
-	private $table;
-	
+{	
 	function __construct()
 	{
 		parent::__construct();
@@ -16,4 +14,5 @@ class user_model extends MY_Model
 		
 		return $this->db->get($this->table);
 	}
+	
 }
