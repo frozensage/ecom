@@ -21,6 +21,14 @@ class MY_Model extends CI_Model
 		return $this->db->insert_id();
 	}
 	
+	function get($select='*', $where=array())
+	{
+		$this->db->select($select);
+		$this->db->set($where);
+		
+		return $this->db->get($this->table);
+	}
+	
 	function set_table($table)
 	{
 		$this->table = $table;

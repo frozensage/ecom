@@ -4,9 +4,10 @@ class user_model extends MY_Model
 	function __construct()
 	{
 		parent::__construct();
-		$this->table = 'tbl_users';
+		
+		$this->set_table('tbl_users');
 	}
-	
+/*	
 	function get($select='*', $where=array())
 	{
 		$this->db->select($select);
@@ -14,5 +15,5 @@ class user_model extends MY_Model
 		
 		return $this->db->get($this->table);
 	}
-	
+*/
 }

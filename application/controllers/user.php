@@ -9,14 +9,28 @@ class user extends MY_Controller
 	
 	function index()
 	{
-		$this->load->view('user/list');
+		$this->manage();
 	}
 	
 	function create()
 	{
-		$this->load_template('backend/user/create', $this->data);
+		$this->load_template('user/create', $this->data);
 	}
-	
+
+	function edit($id)
+	{
+		$this->load->model('user_model','user');
+	}
+
+	function manage()
+	{
+		$this->load->model('user_model','user');
+		
+		$this->data['query'] = $this->user->get();
+		
+		$this->load_template('user/manage');
+	}
+
 	function create_submit()
 	{
 		if(!$this->input->post('submit'))
@@ -26,7 +40,7 @@ class user extends MY_Controller
 		
 		$this->load->library('form_validation');
 			
-		$this->form_validation->set_rules('username','Username','required|valid_email|callback_exist_user');
+		$this->form_validation->set_rules('email','Email','required|valid_email|callback_exist_user');
 		$this->form_validation->set_rules('password','Password','required|min_length[6]|matches[password_conf]');
 		$this->form_validation->set_rules('password_conf','Confirm password','required|');
 			
@@ -50,14 +64,20 @@ class user extends MY_Controller
 			
 			$password = $this->password->hash($this->input->post('password').$salt);
 			
-			$this->user->create(array(
-				'username'=>$this->input->post('username'),
-				'password'=>$password,
-				'salt'=>$salt
+			$this->user->create(array
+			(
+				'email'		=>$this->input->post('email'),
+				'password'	=>$password,
+				'salt'		=>$salt
 			));
 			
-			echo 's';
+			redirect('user');
 		}
+		
+	}
+	
+	function exist_user($email)
+	{
 		
 	}
 	

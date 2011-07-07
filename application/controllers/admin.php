@@ -21,7 +21,7 @@ class admin extends MY_Controller
 	
 		$this->load->library('form_validation');
 		
-		$this->form_validation->set_rules('username','Username','required');
+		$this->form_validation->set_rules('email','Email','required');
 		$this->form_validation->set_rules('password','Password','required|callback_verify_user');
 		
 		$this->form_validation->set_error_delimiters('<p class="error">','</p>');
@@ -34,8 +34,12 @@ class admin extends MY_Controller
 		}
 		else
 		{
-			$this->session->set_userdata('username', $this->input->post('username'));
+			$this->load->model('user_model', 'user');
 			
+			$row = $this->user->get('id, email', array('email'=>$this->input->post('email')))->row();
+			
+			$this->session->set_userdata($row);
+						
 			echo 's';
 		}
 	}
@@ -44,9 +48,9 @@ class admin extends MY_Controller
 	{
 		$this->load->model('user_model', 'user');
 		
-		$username = $this->input->post('username');
+		$email = $this->input->post('email');
 		
-		$query = $this->user->get('password, salt',array('username'=>$username));
+		$query = $this->user->get('password, salt', array('email'=>$email));
 	
 		if($query -> num_rows()>0)
 		{
@@ -58,7 +62,7 @@ class admin extends MY_Controller
 			
 			if($this->password->check_password($this->input->post('password').$row->salt, $row->password))
 			{
-				// set session
+				// user verified
 				
 				return true;
 			}

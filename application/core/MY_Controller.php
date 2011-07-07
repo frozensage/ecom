@@ -11,11 +11,11 @@ class MY_Controller extends CI_Controller
 	
 		$this->data['css'] = array
 		(
-		 	'/css/style.css',
-			'/css/jquery.wysiwyg.css',
-			'/css/facebox.css',
-			'/css/visualize.css',
-			'/css/date_input.css'
+		 	'css/style.css',
+			'css/jquery.wysiwyg.css',
+			'css/facebox.css',
+			'css/visualize.css',
+			'css/date_input.css'
 		);
 		
 		
@@ -45,6 +45,8 @@ class MY_Controller extends CI_Controller
 			),
 		);
 		
+		//$this->data['login'] = $this->session->userdata('login');
+		
 	}	
 	
 	function load_template($view=NULL, $menu=true)
@@ -55,7 +57,7 @@ class MY_Controller extends CI_Controller
 		// load content
 		if($view)
 		{
-			$this->load->view($view, $this->data);
+			$this->load->view('backend/'.$view, $this->data);
 		}
 		
 		$this->load->view('backend/footer');

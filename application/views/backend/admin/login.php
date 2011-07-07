@@ -20,8 +20,8 @@
 		
 		<?php echo form_open('admin/login_submit')?>
 		<p>
-			<label>Username:</label> <br>
-			<?php echo form_input('username',set_value('username'),'id="username" class="text"')?>
+			<label>Email:</label> <br>
+			<?php echo form_input('email',set_value('email'),'id="email" class="text"')?>
 		</p>
 		
 		<p>
