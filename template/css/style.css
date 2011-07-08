@@ -642,8 +642,6 @@ a:hover {
 	}
 
 .block form input.text.medium { width: 600px; }
-.block form input.text.small { width: 20%; }
-.block form input.text.tiny { width: 5%; }
 .block form input.text.big { width: 98%; }
 
 .block form input.text.date_picker {

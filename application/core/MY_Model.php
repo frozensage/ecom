@@ -2,14 +2,31 @@
 class MY_Model extends CI_Model
 {
 	private $table;
+	private $select;
+	private $where;
+	private $like;
+	private $join;
+	private $order_by;
+	private $group_by;
+	private $direction;
+	private $rows;
+	private $offset;
 
 	function __construct()
 	{
 		parent::__construct();
 		
-		$data = array();
+		$this->select = '*';
+		$this->where = array();
+		$this->like = array();
+		$this->join = array();
+		$this->order_by = NULL;
+		$this->group_by = NULL;
+		$this->direction = 'asc';
+		$this->rows = 10;
+		$this->offset = 0;
 	}
-	
+
 	function create($data)
 	{
 		$this->db->set('updated', date('Y-m-d H:i:s', time()));
@@ -20,11 +37,38 @@ class MY_Model extends CI_Model
 		
 		return $this->db->insert_id();
 	}
-	
-	function get($select='*', $where=array())
+
+	function update($data, $where=array())
 	{
-		$this->db->select($select);
-		$this->db->set($where);
+		$this->where = $where;
+		
+		$id = $data->id;
+
+		$this->db->set('updated', date('Y-m-d H:i:s', time()));		
+		
+		return $this->db->update($this->table ,$data, $this->where);
+	}	
+	
+	function delete($where=array())
+	{
+		$this->where = $where;
+		$this->db->delete($this->table, $this->where);
+	}
+	
+	function get($select='*', $filter=array(), $like=array(), $join=array(), $order_by=NULL, $group_by=NULL, $direction='asc', $rows=10, $offset=0)
+	{
+		$this->select = $select;
+		$this->where = $filter;
+		$this->like = $like;
+		$this->join = $join;
+		$this->order_by = $order_by;
+		$this->group_by = $group_by;
+		$this->direction = $direction;
+		$this->rows = $rows;
+		$this->offset = $offset;
+		
+		$this->db->select($this->select);
+		$this->db->set($this->where);
 		
 		return $this->db->get($this->table);
 	}
@@ -34,4 +78,46 @@ class MY_Model extends CI_Model
 		$this->table = $table;
 	}
 	
+	function set_select($select)
+	{
+		$this->select = $select;
+	}
+	
+	function set_where($where)
+	{
+		$this->where = $where;
+	}
+	function set_like($like)
+	{
+		$this->like = $like;
+	}
+	function set_join($join)
+	{
+		$this->join = $join;
+	}
+	
+	function set_order_by($order_by)
+	{
+		$this->order_by = $order_by;
+	}
+	
+	function set_group_by($group_by)
+	{
+		$this->group_by = $group_by;
+	}
+	
+	function set_direction($direction)
+	{
+		$this->direction = $direction;
+	}
+	
+	function set_rows($rows)
+	{
+		$this->rows = $rows;
+	}
+	
+	function set_offset($offset)
+	{
+		$this->offset = $offset;
+	}
 }

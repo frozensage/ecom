@@ -18,49 +18,71 @@
 	<div id="hld">
 	
 		<div class="wrapper">	<!-- wrapper begins -->
+        		
+            <div id="header">
+                <div class="hdrl"></div>
+                <div class="hdrr"></div>
+                
+                <h1><a href="http://enstyled.com/adminus/original/page.html#">Adminus</a></h1>
+                
+                <ul id="nav">
+                    <li><a href="http://enstyled.com/adminus/original/page.html#">Dashboard</a></li>
+                    <li class="active"><a href="http://enstyled.com/adminus/original/page.html#">Pages</a>
+                        <ul>
+                            <li><a href="http://enstyled.com/adminus/original/page.html#">List pages</a></li>
+                            <li><a href="http://enstyled.com/adminus/original/page.html#">Add page</a></li>
+                            <li><a href="http://enstyled.com/adminus/original/page.html#">More actions</a>
+                                <ul>
+                                    <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
+                                    <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
+                                    <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a>
+                                        <ul>
+                                            <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
+                                            <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
+                                            <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="http://enstyled.com/adminus/original/page.html#">Posts</a></li>
+                    <li><a href="http://enstyled.com/adminus/original/page.html#">Media</a>
+                        <ul>
+                            <li><a href="http://enstyled.com/adminus/original/page.html#">List media</a></li>
+                            <li><a href="http://enstyled.com/adminus/original/page.html#">Add media</a></li>
+                            <li><a href="http://enstyled.com/adminus/original/page.html#">Something else</a></li>
+                        </ul>
+                    </li>
+                    <li class="nobg"><a href="http://enstyled.com/adminus/original/page.html#">Users</a></li>
+                </ul>
+                
+                <p class="user">Logged in as, <?php echo $this->session->userdata('email')?> | <a href="<?php echo site_url('admin/password')?>">Password</a> | <a href="<?php echo site_url('admin/logout')?>">Logout</a></p>
+            </div>		<!-- #header ends -->
+        		
+        <div class="block">
 
-        <?php if($this->session->userdata('id')): ?>
-		
-        <div id="header">
-            <div class="hdrl"></div>
-            <div class="hdrr"></div>
+            <div class="block_head">
+                <div class="bheadl"></div>
+                <div class="bheadr"></div>
+                
+                <h2><?php echo $heading?></h2>
+                
+            </div>	<!-- .block_head ends -->
             
-            <h1><a href="http://enstyled.com/adminus/original/page.html#">Adminus</a></h1>
+            <div class="block_content">
             
-            <ul id="nav">
-                <li><a href="http://enstyled.com/adminus/original/page.html#">Dashboard</a></li>
-                <li class="active"><a href="http://enstyled.com/adminus/original/page.html#">Pages</a>
-                    <ul>
-                        <li><a href="http://enstyled.com/adminus/original/page.html#">List pages</a></li>
-                        <li><a href="http://enstyled.com/adminus/original/page.html#">Add page</a></li>
-                        <li><a href="http://enstyled.com/adminus/original/page.html#">More actions</a>
-                            <ul>
-                                <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
-                                <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
-                                <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a>
-                                    <ul>
-                                        <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
-                                        <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
-                                        <li><a href="http://enstyled.com/adminus/original/page.html#">Some action</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href="http://enstyled.com/adminus/original/page.html#">Posts</a></li>
-                <li><a href="http://enstyled.com/adminus/original/page.html#">Media</a>
-                    <ul>
-                        <li><a href="http://enstyled.com/adminus/original/page.html#">List media</a></li>
-                        <li><a href="http://enstyled.com/adminus/original/page.html#">Add media</a></li>
-                        <li><a href="http://enstyled.com/adminus/original/page.html#">Something else</a></li>
-                    </ul>
-                </li>
-                <li class="nobg"><a href="http://enstyled.com/adminus/original/page.html#">Users</a></li>
-            </ul>
-            
-            <p class="user">Hello, <a href="http://enstyled.com/adminus/original/page.html#">John</a> | <a href="http://enstyled.com/adminus/original/index.html">Logout</a></p>
-        </div>		<!-- #header ends -->
-
-        
-        <?php endif ?>
+                <p class="breadcrumb"><a href=".">Dashboard</a> &raquo; <a href=".">Manage users</a> &raquo; <strong>Create supplier</strong></p>
+                <?php if($this->session->flashdata('success')) : // success msg ?>
+                    <div class="message success">
+                        <?php echo $this->session->flashdata('success') ?>					
+                    </div>
+                <?php endif ?>
+                
+                <?php if(isset($has_error)) : // error msg ?>
+                    <div class="message errormsg">
+                        Please fix all error(s) before re-submitting.					
+                    </div>
+                <?php endif ?>
+				
+                <!-- end header -->

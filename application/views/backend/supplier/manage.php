@@ -7,7 +7,9 @@
         <thead>
             <tr>
                 <th width="10"><input type="checkbox" class="check_all"></th>
+                <th class="header" style="cursor: pointer; ">Supplier</th>
                 <th class="header" style="cursor: pointer; ">Email</th>
+                <th class="header" style="cursor: pointer; ">Phone</th>
                 <th class="header" style="cursor: pointer; ">Updated</th>
                 <th class="header" style="cursor: pointer; ">Created</th>
                 <td>&nbsp;</td>
@@ -18,7 +20,9 @@
         <?php foreach($query->result() as $index=>$row): ?>
             <tr class="<?php echo $index%2?'odd':'even'?>">
                 <td><input type="checkbox"></td>
-                <td><a href="edit/<?php echo $row->id?>"><?php echo $row->email?></a></td>
+                <td><a href="<?php echo site_url('supplier/edit/'.$row->id)?>"><?php echo $row->supplier?></a></td>
+                <td><a href="mailto:<?php echo $row->email?>"><?php echo $row->email?></a></td>
+                <td><?php echo $row->phone?></td>
                 <td><?php echo $row->updated?></td>
                 <td><?php echo $row->created?></td>
                 <td class="delete"><a href="http://enstyled.com/adminus/original/page.html#">Edit</a> | <a href="http://enstyled.com/adminus/original/page.html#">Delete</a></td>
@@ -27,6 +31,8 @@
         </tbody>
         
     </table>
+    
+    <p><a href="<?php echo site_url('supplier/create')?>">Create more</a></p>      
                 
     <div class="tableactions">
         <select>
@@ -35,7 +41,7 @@
             <option>Edit</option>
         </select>
         
-        <input type="submit" class="submit tiny" value="Apply to selected">
+        <?php echo form_submit('', 'Apply to selected', 'class="submit tiny"') ?>        
     </div>		<!-- .tableactions ends -->
                 
     <div class="pagination right">

@@ -1,47 +1,64 @@
 <?php
-class admin extends MY_Controller
+class admin extends CI_Controller
 {
+	protected $data;
+	
 	function __construct()
 	{
 		parent::__construct();
+		
+		$this->data['css'] = array
+		(
+		 	'css/style.css',
+			'css/jquery.wysiwyg.css',
+			'css/facebox.css',
+			'css/visualize.css',
+			'css/date_input.css'
+		);
 	}
 	
 	function index()
 	{
-		$this->load_template('backend/admin/login', $this->data);
+		if($this->session->userdata('backend')) // send to user list
+		{
+			redirect('user');
+		}
+	
+		if($this->input->post('submit'))
+		{
+			$this->load->library('form_validation');
+			
+			$this->form_validation->set_rules('email','Email','required');
+			$this->form_validation->set_rules('password','Password','required|callback_verify_user');
+			
+			$this->form_validation->set_error_delimiters('<p class="error">','</p>');
+			
+			if($this->form_validation->run())
+			{
+				$this->load->model('user_model', 'user');
+				
+				$row = $this->user->get('id, email', array('email'=>$this->input->post('email')))->row();
+				
+				$this->session->set_userdata('backend', $row);
+				
+				redirect('user/manage');
+			}
+			else
+			{
+				$this->data['has_error'] = true;				
+			}
+		}
+
+		$this->load->view('backend/admin/header', $this->data);
+		$this->load->view('backend/admin/login', $this->data);
+		$this->load->view('backend/admin/footer', $this->data);
 	}
 	
-	function login_submit()
-	{
-	
-		if(!$this->input->post('submit'))
-		{
-			redirect('admin');
-		}
-	
-		$this->load->library('form_validation');
+	function logout()
+	{		
+		$this->session->unset_userdata('backend');
 		
-		$this->form_validation->set_rules('email','Email','required');
-		$this->form_validation->set_rules('password','Password','required|callback_verify_user');
-		
-		$this->form_validation->set_error_delimiters('<p class="error">','</p>');
-		
-		if($this->form_validation->run() == false)
-		{
-			$this->data['has_error'] = true;
-			
-			$this->load_template('backend/admin/login', $this->data);	
-		}
-		else
-		{
-			$this->load->model('user_model', 'user');
-			
-			$row = $this->user->get('id, email', array('email'=>$this->input->post('email')))->row();
-			
-			$this->session->set_userdata($row);
-						
-			echo 's';
-		}
+		redirect('admin');
 	}
 	
 	function verify_user()
@@ -66,7 +83,6 @@ class admin extends MY_Controller
 				
 				return true;
 			}
-			
 		}
 		
 		$this->form_validation->set_message('verify_user','username or password entered is incorrect');	

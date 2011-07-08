@@ -43,10 +43,7 @@ class MY_Controller extends CI_Controller
 				"Manufacturers" => "admin/manufacturer",
 				"Add manufacturer" => "admin/manufacturer/add"
 			),
-		);
-		
-		//$this->data['login'] = $this->session->userdata('login');
-		
+		);		
 	}	
 	
 	function load_template($view=NULL, $menu=true)

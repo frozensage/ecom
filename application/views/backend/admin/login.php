@@ -18,7 +18,7 @@
 		</div>
 		<?php endif ?>
 		
-		<?php echo form_open('admin/login_submit')?>
+		<?php echo form_open()?>
 		<p>
 			<label>Email:</label> <br>
 			<?php echo form_input('email',set_value('email'),'id="email" class="text"')?>
