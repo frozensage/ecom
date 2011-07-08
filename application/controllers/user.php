@@ -56,33 +56,34 @@ class user extends MY_Controller
 			}
 
 		}
-		
-		$this->load_template('user/create', $this->data);
-	}
 
-	function edit($id)
-	{
-		$this->load->model('user_model','user');
+		$this->data['heading'] = 'Create user';
+		$this->load_template('user/create', $this->data);
 	}
 
 	function manage()
 	{
 		$this->load->model('user_model','user');
-		
+
+		$this->data['heading'] = 'Manage users';
 		$this->data['query'] = $this->user->get();
 		
 		$this->load_template('user/manage');
 	}
-
-	function create_submit()
-	{
-	
-		
-	}
 	
 	function exist_user($email)
 	{
+		$this->load->model('user_model', 'user');
+				
+		$query = $this->user->get('id', array('email'=>$this->input->post('email')));
+	
+		if($query -> num_rows()>0)
+		{
+			$this->form_validation->set_message('exist_user','email "'.$this->input->post('email').'" already exists.');	
+			return false;
+		}
 		
+		return true;
 	}
 	
 	private function _generate_salt() 
