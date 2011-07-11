@@ -97,7 +97,8 @@ class supplier extends MY_Controller
 		
 		$this->load->model('supplier_model','supplier');
 		
-		$query = $this->supplier->get('*',array('id'=>$id));
+		$this->supplier->set_where(array('id'=>$id));
+		$query = $this->supplier->get();
 
 		if($query->num_rows() < 1)
 		{
@@ -124,7 +125,8 @@ class supplier extends MY_Controller
 				
 				if($this->input->post('id')) // edit
 				{
-					$this->supplier->update($this->input->post('supplier'), array('id'=>$this->input->post('id')));			
+					$this->supplier->set_where(array('id'=>$this->input->post('id')));
+					$this->supplier->update($this->input->post('supplier'));			
 					$this->session->set_flashdata('success', 'Supplier "'.set_value('supplier[supplier]').'" has been updated');	
 				}
 				else // create

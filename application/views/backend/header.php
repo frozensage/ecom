@@ -57,7 +57,7 @@
                     <li class="nobg"><a href="http://enstyled.com/adminus/original/page.html#">Users</a></li>
                 </ul>
                 
-                <p class="user">Logged in as, <?php echo $this->session->userdata('email')?> | <a href="<?php echo site_url('admin/password')?>">Password</a> | <a href="<?php echo site_url('admin/logout')?>">Logout</a></p>
+                <p class="user">Logged in as, <?php echo $this->session->userdata('backend')->email?> | <a href="<?php echo site_url('admin/password')?>">Password</a> | <a href="<?php echo site_url('admin/logout')?>">Logout</a></p>
             </div>		<!-- #header ends -->
         		
         <div class="block">

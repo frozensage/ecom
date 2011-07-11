@@ -37,7 +37,10 @@ class admin extends CI_Controller
 			{
 				$this->load->model('user_model', 'user');
 				
-				$row = $this->user->get('id, email', array('email'=>$this->input->post('email')))->row();
+				$this->user->set_select('id,email');
+				$this->user->set_where(array('email'=>$this->input->post('email')));			
+				
+				$row = $this->user->get()->row();
 				
 				$this->session->set_userdata('backend', $row);
 				
@@ -67,7 +70,9 @@ class admin extends CI_Controller
 		
 		$email = $this->input->post('email');
 		
-		$query = $this->user->get('password, salt', array('email'=>$email));
+		$this->user->set_where(array('email'=>$email));
+		
+		$query = $this->user->get();
 	
 		if($query -> num_rows()>0)
 		{

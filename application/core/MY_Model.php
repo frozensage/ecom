@@ -38,35 +38,21 @@ class MY_Model extends CI_Model
 		return $this->db->insert_id();
 	}
 
-	function update($data, $where=array())
-	{
-		$this->where = $where;
-		
-		$id = $data->id;
-
+	function update($data)
+	{			
 		$this->db->set('updated', date('Y-m-d H:i:s', time()));		
 		
 		return $this->db->update($this->table ,$data, $this->where);
 	}	
 	
-	function delete($where=array())
+	function delete()
 	{
 		$this->where = $where;
 		$this->db->delete($this->table, $this->where);
 	}
 	
-	function get($select='*', $filter=array(), $like=array(), $join=array(), $order_by=NULL, $group_by=NULL, $direction='asc', $rows=10, $offset=0)
-	{
-		$this->select = $select;
-		$this->where = $filter;
-		$this->like = $like;
-		$this->join = $join;
-		$this->order_by = $order_by;
-		$this->group_by = $group_by;
-		$this->direction = $direction;
-		$this->rows = $rows;
-		$this->offset = $offset;
-		
+	function get()
+	{	
 		$this->db->select($this->select);
 		$this->db->set($this->where);
 		
