@@ -11,6 +11,14 @@
 
 	<!--[if lt IE 8]><style type="text/css" media="all">@import url("/css/ie.css");</style><![endif]-->
 
+	<?php if (isset($js)) : ?>
+		<?php foreach ($js as $each) : ?>
+            <script type="text/javascript" src="<?=base_url()?>js/<?=$each?>"></script>
+		<?php endforeach ?>
+    <?php endif ?>
+    
+    <script type="text/javascript" src="<?=base_url()?>js/backend.js?<?=rand()?>"></script>
+
 </head>
 
 <body>

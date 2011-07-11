@@ -18,6 +18,10 @@ class MY_Controller extends CI_Controller
 			'css/date_input.css'
 		);
 		
+		$this->data['js'] = array
+		(
+		);
+		
 		
 		$this->data['nav'] = array
 		(

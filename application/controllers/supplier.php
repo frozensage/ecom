@@ -64,16 +64,16 @@ class supplier extends MY_Controller
 		if($current_page <= 1)
 			$has_prev = false;
 	
-		$pagination['per_page'] = $per_page;
-		$pagination['current_page'] = $current_page;
-		$pagination['total_rows'] = $total_rows;
-		$pagination['total_pages'] = $total_pages;
-		$pagination['has_prev'] = $has_prev;
-		$pagination['has_next'] = $has_next;
-		$pagination['prev_page'] = $current_page-1;
-		$pagination['next_page'] = $current_page+1;
-		$pagination['start_row'] = $start_row = ($current_page - 1)*$per_page + 1;
-		$pagination['end_row'] = min(($current_page - 1)*$per_page+$per_page, $total_rows);
+		$pagination['per_page']		= $per_page;
+		$pagination['current_page']	= $current_page;
+		$pagination['total_rows'] 	= $total_rows;
+		$pagination['total_pages'] 	= $total_pages;
+		$pagination['has_prev'] 	= $has_prev;
+		$pagination['has_next'] 	= $has_next;
+		$pagination['prev_page'] 	= $current_page-1;
+		$pagination['next_page'] 	= $current_page+1;
+		$pagination['start_row'] 	= $start_row = ($current_page - 1)*$per_page + 1;
+		$pagination['end_row'] 		= min(($current_page - 1)*$per_page+$per_page, $total_rows);
 	
 		$data['result'] = $this->manufacturer->get('*',$filters,$order_by,$direction,$per_page,$start_row-1)->result();
 		$data['pagination'] = $pagination;
