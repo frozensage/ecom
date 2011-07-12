@@ -55,8 +55,8 @@ $(document).ready(function()
 					order_by_header.attr('class','headerSortDown');
 				}
 			}
+			
 		});
-		
 		
 		$(window).trigger("hashchange");		
 	}
@@ -68,3 +68,39 @@ $(document).ready(function()
 		return false;
 	});
 });
+
+function pagination(data, selector)
+{
+	$(selector + " *").remove(); // clear pagination
+	
+	var html = '<p>Displaying ' + data.start_row + ' - ' + data.end_row + ' of ' + data.total_rows + ' result(s).</p>';
+	
+	$(selector).prepend(html);
+	
+	if(data.total_pages > 1)
+	{	
+		for(var i=1; i<=data.total_pages; i++)
+		{
+			var page = $('<a href="#current_page='+i+'">' + i + '</a>');
+			
+			if(i == data.current_page) page.addClass('active');
+			
+			$(selector).append(page);
+		}
+		
+		$(selector + " a").bind("click", function()
+		{
+			var page = $.deparam.fragment($(this).attr('href'));
+			
+			$.bbq.pushState(page);
+			
+			return false;
+		});
+	}
+	else
+	{
+		$.bbq.removeState('current_page');
+	}
+	
+	//console.log(data.total_pages);
+}		

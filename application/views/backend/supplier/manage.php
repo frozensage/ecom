@@ -17,6 +17,9 @@
         
         <tbody></tbody>
     </table>
+                
+    <div class="pagination"></div>		
+    <!-- .pagination ends -->
     
     <p><a href="<?php echo site_url('supplier/create')?>">Create more</a></p>      
                 
@@ -29,17 +32,7 @@
         
         <?php echo form_submit('', 'Apply to selected', 'class="submit tiny"') ?>        
     </div>		<!-- .tableactions ends -->
-                
-    <div class="pagination right">
-        <a href="http://enstyled.com/adminus/original/page.html#">«</a>
-        <a href="http://enstyled.com/adminus/original/page.html#" class="active">1</a>
-        <a href="http://enstyled.com/adminus/original/page.html#">2</a>
-        <a href="http://enstyled.com/adminus/original/page.html#">3</a>
-        <a href="http://enstyled.com/adminus/original/page.html#">4</a>
-        <a href="http://enstyled.com/adminus/original/page.html#">5</a>
-        <a href="http://enstyled.com/adminus/original/page.html#">6</a>
-        <a href="http://enstyled.com/adminus/original/page.html#">»</a>
-    </div>		<!-- .pagination ends -->
+
     
 </form>
 
@@ -68,8 +61,15 @@ function fetch_list(e)
 		{
 			// template the returned data and add it to the table
 			$('tbody').html($('.list').tmpl(data.result));
+			
+			// make it pretty
+			$('tbody tr:odd').addClass('odd');
+			$('tbody tr:even').addClass('even');
+			
+			// add the pagination
+			pagination(data.pagination, ".pagination");
 		},
-		"json")
+		"json");
 }
 
 $(window).bind("hashchange", fetch_list);

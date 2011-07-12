@@ -44,19 +44,16 @@ class supplier extends MY_Controller
 	
 	function results()
 	{
-	/*	$filters = array();	
-	
-		$order_by = $this->input->post('order_by')?$this->input->post('order_by'):null;
-		$direction = $this->input->post('direction')?$this->input->post('direction'):'asc';
+		$this->load->model('supplier_model','supplier');
 		
 		$per_page = $this->input->post('per_page')?$this->input->post('per_page'):10;
 		$current_page = $this->input->post('current_page')?$this->input->post('current_page'):1;
 				
-		$total_rows = $this->manufacturer->get()->num_rows();
+		$total_rows = $this->supplier->get()->num_rows();
 		$total_pages = ceil($total_rows/$per_page);
 	
 		$has_next = true;
-		if($current_page == $total_pages)
+		if($current_page === $total_pages)
 			$has_next = false;
 	
 		$has_prev = true;
@@ -74,18 +71,14 @@ class supplier extends MY_Controller
 		$pagination['start_row'] 	= $start_row = ($current_page - 1)*$per_page + 1;
 		$pagination['end_row'] 		= min(($current_page - 1)*$per_page+$per_page, $total_rows);
 	
-		$data['result'] = $this->manufacturer->get('*',$filters,$order_by,$direction,$per_page,$start_row-1)->result();
 		$data['pagination'] = $pagination;
-	*/
-		$this->load->model('supplier_model','supplier');
 		
-		$this->supplier->set_order_by($this->input->post('order_by'));
-		$this->supplier->set_direction($this->input->post('direction'));
+		$this->supplier->set_order_by(array($this->input->post('order_by')=>$this->input->post('direction')));
+		$this->supplier->set_rows($per_page);
+		$this->supplier->set_offset($current_page-1);
 		
 		$data['result'] = $this->supplier->get()->result();
-		
-		//echo $this->supplier->order_by;
-		
+				
 		echo json_encode($data);
 	}
 	

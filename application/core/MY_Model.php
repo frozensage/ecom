@@ -8,7 +8,6 @@ class MY_Model extends CI_Model
 	protected $join;
 	protected $order_by;
 	protected $group_by;
-	protected $direction;
 	protected $rows;
 	protected $offset;
 
@@ -20,9 +19,8 @@ class MY_Model extends CI_Model
 		$this->where = array();
 		$this->like = array();
 		$this->join = array();
-		$this->order_by = NULL;
-		$this->group_by = NULL;
-		$this->direction = 'asc';
+		$this->order_by = array();
+		$this->group_by = array();
 		$this->rows = 10;
 		$this->offset = 0;
 	}
@@ -54,14 +52,34 @@ class MY_Model extends CI_Model
 	function get()
 	{	
 		$this->db->select($this->select);
-		$this->db->set($this->where);
-				
-		if(isset($this->order_by) and !empty($this->order_by))
-		{	
-			$this->db->order_by($this->order_by, $this->direction);
+		$this->db->where($this->where);
+		//$this->db->like($like);
+		
+		// join
+		if(isset($this->join) and count($this->join)>0)
+		{
+			foreach($this->join as $table=>$where)
+			{
+				$this->db->join($table, $where); // ie: $this->db->join('comments', 'comments.id = blogs.id');
+			}
 		}
 		
-		return $this->db->get($this->table);
+		// order by
+		if(isset($this->order_by) and count($this->order_by)>0)
+		{			
+			foreach($this->order_by as $field => $direction)
+			{
+				$this->db->order_by($field, $direction);
+			}
+		}
+		
+		// group by
+		if(isset($this->group_by) and count($this->group_by)>0)
+		{
+			$this->db->group_by($this->group_by);		
+		}
+		
+		return $this->db->get($this->table, $this->rows, $this->offset);
 	}
 	
 	function set_table($table)
@@ -95,11 +113,6 @@ class MY_Model extends CI_Model
 	function set_group_by($group_by)
 	{
 		$this->group_by = $group_by;
-	}
-	
-	function set_direction($direction)
-	{
-		$this->direction = $direction;
 	}
 	
 	function set_rows($rows)
