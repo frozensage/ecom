@@ -81,26 +81,29 @@ function pagination(data, selector)
 	{	
 		for(var i=1; i<=data.total_pages; i++)
 		{
+			// init page link
 			var page = $('<a href="#current_page='+i+'">' + i + '</a>');
 			
+			// add active if current page
 			if(i == data.current_page) page.addClass('active');
 			
+			// append click action to each page link
+			page.bind("click", function()
+			{
+				var page = $.deparam.fragment($(this).attr('href'));
+				
+				$.bbq.pushState(page);
+				
+				return false;
+			});
+			
+			// append page link to the previous page links
 			$(selector).append(page);
 		}
-		
-		$(selector + " a").bind("click", function()
-		{
-			var page = $.deparam.fragment($(this).attr('href'));
-			
-			$.bbq.pushState(page);
-			
-			return false;
-		});
 	}
 	else
 	{
 		$.bbq.removeState('current_page');
 	}
 	
-	//console.log(data.total_pages);
 }		
