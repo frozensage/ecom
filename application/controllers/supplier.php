@@ -34,7 +34,6 @@ class supplier extends MY_Controller
 	
 	function manage()
 	{
-		//$this->data['js'][] = 'jquery/jquery.ba-bbq.js';
 		$this->load->model('supplier_model','supplier');
 		
 		$this->data['heading'] = 'Manage Suppliers';
@@ -45,7 +44,7 @@ class supplier extends MY_Controller
 	
 	function results()
 	{
-		$filters = array();	
+	/*	$filters = array();	
 	
 		$order_by = $this->input->post('order_by')?$this->input->post('order_by'):null;
 		$direction = $this->input->post('direction')?$this->input->post('direction'):'asc';
@@ -77,7 +76,16 @@ class supplier extends MY_Controller
 	
 		$data['result'] = $this->manufacturer->get('*',$filters,$order_by,$direction,$per_page,$start_row-1)->result();
 		$data['pagination'] = $pagination;
-	
+	*/
+		$this->load->model('supplier_model','supplier');
+		
+		$this->supplier->set_order_by($this->input->post('order_by'));
+		$this->supplier->set_direction($this->input->post('direction'));
+		
+		$data['result'] = $this->supplier->get()->result();
+		
+		//echo $this->supplier->order_by;
+		
 		echo json_encode($data);
 	}
 	

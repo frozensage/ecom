@@ -1,16 +1,16 @@
 <?php
 class MY_Model extends CI_Model
 {
-	private $table;
-	private $select;
-	private $where;
-	private $like;
-	private $join;
-	private $order_by;
-	private $group_by;
-	private $direction;
-	private $rows;
-	private $offset;
+	protected $table;
+	protected $select;
+	protected $where;
+	protected $like;
+	protected $join;
+	protected $order_by;
+	protected $group_by;
+	protected $direction;
+	protected $rows;
+	protected $offset;
 
 	function __construct()
 	{
@@ -55,6 +55,11 @@ class MY_Model extends CI_Model
 	{	
 		$this->db->select($this->select);
 		$this->db->set($this->where);
+				
+		if(isset($this->order_by) and !empty($this->order_by))
+		{	
+			$this->db->order_by($this->order_by, $this->direction);
+		}
 		
 		return $this->db->get($this->table);
 	}

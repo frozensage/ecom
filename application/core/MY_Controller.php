@@ -20,6 +20,9 @@ class MY_Controller extends CI_Controller
 		
 		$this->data['js'] = array
 		(
+			'jquery/jquery-1.6.2.min.js',
+			'jquery/jquery.ba-bbq.js',
+			'jquery/jquery.tmpl.min.js'
 		);
 		
 		
