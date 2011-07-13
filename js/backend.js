@@ -1,6 +1,8 @@
 // JavaScript Document
 $(document).ready(function()
 {
+	//$('form input[type=file]').addClass('file');
+	
 	if($('table.listing').length > 0)
 	{	
 		$("thead a").each(function()
@@ -71,7 +73,7 @@ $(document).ready(function()
 
 function pagination(data, selector)
 {
-	$(selector + " *").remove(); // clear pagination
+	$(selector).empty(); // clear pagination
 	
 	var html = '<p>Displaying ' + data.start_row + ' - ' + data.end_row + ' of ' + data.total_rows + ' result(s).</p>';
 	

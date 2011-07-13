@@ -46,6 +46,8 @@ class supplier extends MY_Controller
 	{
 		$this->load->model('supplier_model','supplier');
 		
+		$order_by = $this->input->post('order_by')?$this->input->post('order_by'):'supplier';
+		$direction = $this->input->post('direction')?$this->input->post('direction'):'asc';
 		$per_page = $this->input->post('per_page')?$this->input->post('per_page'):10;
 		$current_page = $this->input->post('current_page')?$this->input->post('current_page'):1;
 				
@@ -73,7 +75,7 @@ class supplier extends MY_Controller
 	
 		$data['pagination'] = $pagination;
 		
-		$this->supplier->set_order_by(array($this->input->post('order_by')=>$this->input->post('direction')));
+		$this->supplier->set_order_by(array($order_by=>$direction));
 		$this->supplier->set_rows($per_page);
 		$this->supplier->set_offset($current_page-1);
 		

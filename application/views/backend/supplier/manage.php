@@ -32,11 +32,8 @@
         
         <?php echo form_submit('', 'Apply to selected', 'class="submit tiny"') ?>        
     </div>		<!-- .tableactions ends -->
-
     
 </form>
-
-
 
 <script class="list" type="text/x-jquery-tmpl">
 <tr>

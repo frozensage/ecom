@@ -11,18 +11,20 @@ class MY_Controller extends CI_Controller
 	
 		$this->data['css'] = array
 		(
+			'css/jquery-ui.css',
+			//'css/jquery.wysiwyg.css',
+			//'css/facebox.css',
+			//'css/visualize.css',
+			'css/date_input.css',
 		 	'css/style.css',
-			'css/jquery.wysiwyg.css',
-			'css/facebox.css',
-			'css/visualize.css',
-			'css/date_input.css'
 		);
 		
 		$this->data['js'] = array
 		(
 			'jquery/jquery-1.6.2.min.js',
+			'jquery/jquery-ui-1.8.2.min.js',
 			'jquery/jquery.ba-bbq.js',
-			'jquery/jquery.tmpl.min.js'
+			'jquery/jquery.tmpl.min.js',
 		);
 		
 		
