@@ -150,17 +150,13 @@ $(function () {
 	
 	// Block search
 	$('.block .block_head form .text').bind('click', function() { $(this).attr('value', ''); });
-	
-	
-	
+		
 	// Image actions menu
 	$('ul.imglist li').hover(
 		function() { $(this).find('ul').css('display', 'none').fadeIn('fast').css('display', 'block'); },
 		function() { $(this).find('ul').fadeOut(100); }
 	);
-	
-	
-		
+			
 	// Image delete confirmation
 	$('ul.imglist .delete a').click(function() {
 		if (confirm("Are you sure you want to delete this image?")) {

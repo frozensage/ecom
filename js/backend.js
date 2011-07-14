@@ -1,9 +1,13 @@
 // JavaScript Document
 $(document).ready(function()
 {
-	//$('form input[type=file]').addClass('file');
-	
-	if($('table.listing').length > 0)
+	// Image actions menu
+	$('ul.imglist li').hover(
+		function() { $(this).find('ul').css('display', 'none').fadeIn('fast').css('display', 'block'); },
+		function() { $(this).find('ul').fadeOut(100); }
+	);
+
+	if($('table.listing').length)
 	{	
 		$("thead a").each(function()
 		{

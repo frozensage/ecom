@@ -7,11 +7,6 @@ class supplier extends MY_Controller
 	{
 		parent::__construct();
 		
-		if(!$this->session->userdata('backend')) // kick back to log in
-		{
-			redirect('admin');
-		}
-		
 		$this->rules = array
 		(
 			array(

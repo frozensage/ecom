@@ -55,6 +55,11 @@ class MY_Controller extends CI_Controller
 		);
 		
 		$this->data['heading'] = 'Admin';
+		
+		if(!$this->session->userdata('backend')) // kick back to log in
+		{
+			redirect('admin');
+		}
 	}	
 	
 	function load_template($view=NULL, $menu=true)
