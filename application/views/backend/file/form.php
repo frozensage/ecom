@@ -62,16 +62,13 @@
 			}
 	});
 	
-	
 	$(window).bind('hashchange', function()
 	{		
 		$.post(
 			"<?php echo site_url('file/delete')?>", 
 			$.deparam.fragment(),
 			function(data)
-			{
-				console.log(data.path+data.filename);
-				
+			{				
 				$('.imglist li img[src="'+data.path+data.filename+'"]').parents('li').fadeOut(500);
 			}, 
 			"json");
