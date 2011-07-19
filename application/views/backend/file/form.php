@@ -1,11 +1,10 @@
 <?php echo form_open_multipart('file/commit')?>
-<ul class="imglist">
-</ul>
+<ul class="imglist"></ul>
 
 <p class="fileupload"> 
     <label>File:</label><br />
     <input type="file" id="file" name="file" /> 
-    <span id="uploadmsg">Max size 3Mb</span>
+    <span id="uploadmsg">Max size 3MB</span>
 </p>
 
 <?php echo form_submit('Submit', 'submit');?>
@@ -29,37 +28,46 @@
 	// Style file input
 	$("input[type=file]").filestyle(
 	{ 
-	    image: "<?php echo base_url() ?>images/upload.gif",
+	    image		: "<?php echo base_url() ?>images/upload.gif",
 	    imageheight : 30,
-	    imagewidth : 80,
-	    width : 250
+	    imagewidth 	: 80,
+	    width 		: 250
 	});
 
-	var uploader = new qq.FileUploaderBasic(
+	new AjaxUpload('file', 
 	{
-		button: 	$('#file')[0],
-		action:		'<?php echo site_url("file/commit")?>',
-		debug:		true,
-		onSubmit: 
-			function(id, filename)
-			{
-				$('.fileupload #uploadmsg').toggleClass('loading').text('Uploading '+filename+' ...');
-			},
-		onComplete : 
-			function(id, filename, response) 
-			{
-				$('.fileupload #uploadmsg').toggleClass('loading').empty();
-				
-				$('.imglist').append(
-					$('.img').tmpl(
+		action			: '<?php echo site_url("file/commit")?>',
+		name			: 'file', // File upload name
+		autoSubmit		: true,
+		responseType	: "json",
+		onChange		: function(file, extension){},
+		onSubmit		: 
+				function(id, filename)
+				{
+					$('.fileupload #uploadmsg').toggleClass('loading').text('Uploading...');
+				},
+		onComplete 		: 
+				function(filename, response) 
+				{					
+					$('.fileupload #uploadmsg').toggleClass('loading').text('Max size 3MB');
+					
+					if(response.error != null)
 					{
-						path: response.path, 
-						filename: filename
-					})
-					.hide().fadeIn(500));
-				
-				$('.imglist a.enlarge').fancybox();
-			}
+						$('.fileupload').after(response.error);
+					}
+					else
+					{
+						$('.imglist').append(
+						$('.img').tmpl(
+						{
+							path: response.path, 
+							filename: filename
+						})
+						.hide().fadeIn(500));
+					
+						$('.imglist a.enlarge').fancybox();
+					}
+				}
 	});
 	
 	$(window).bind('hashchange', function()
