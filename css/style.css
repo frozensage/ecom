@@ -757,6 +757,11 @@ a:hover {
 	color: #757575;
 	vertical-align: middle;
 	}
+	
+.block form .note.no-left
+{
+	padding-left: 0;
+}
 
 .block form .note.error { color: #e3302c; }
 			
