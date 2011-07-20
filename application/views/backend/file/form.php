@@ -7,18 +7,21 @@
     <span id="uploadmsg">Max size 3MB</span>
 </p>
 
-<?php echo form_submit('Submit', 'submit');?>
+<p>
+    <?php echo form_submit('submit','Save', 'class="submit"')?> <a href="#" class="back_btn">Go back</a>
+</p>
+
 <?php echo form_close()?>
 
 <script class="img" type="text/x-jquery-tmpl">
 <li>
-	<img src="${path+filename}" width="120" height="120">
+	<img src="<?php echo base_url()?>uploads/${file_name}" width="120" height="120">
 	<ul>
 		<li class="view">
-			<a href="${path+filename}" class="enlarge">View</a>
+			<a href="<?php echo base_url()?>uploads/${file_name}" class="enlarge">View</a>
 		</li>
 		<li class="delete">
-			<a href="#delete=${filename}" class="delete">Delete</a>
+			<a href="#delete=${file_name}" class="delete">Delete</a>
 		</li>
 	</ul>
 </li>
@@ -44,6 +47,7 @@
 		onSubmit		: 
 				function(id, filename)
 				{
+					$('.note').remove();
 					$('.fileupload #uploadmsg').toggleClass('loading').text('Uploading...');
 				},
 		onComplete 		: 
@@ -53,17 +57,11 @@
 					
 					if(response.error != null)
 					{
-						$('.fileupload').after(response.error);
+						$('.fileupload').after($('<p class="error note no-left"/>').text(response.error));
 					}
 					else
-					{
-						$('.imglist').append(
-						$('.img').tmpl(
-						{
-							path: response.path, 
-							filename: filename
-						})
-						.hide().fadeIn(500));
+					{					
+						$('.imglist').append($('.img').tmpl(response).hide().fadeIn(500));
 					
 						$('.imglist a.enlarge').fancybox();
 					}

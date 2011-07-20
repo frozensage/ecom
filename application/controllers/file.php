@@ -40,7 +40,7 @@ class file extends MY_Controller
 	{	
 		$config['upload_path'] 		= 'uploads/';
 		$config['allowed_types'] 	= 'gif|jpg|png';
-		$config['max_size']			= '10 * 1024 * 1024';
+	//	$config['max_size']			= '100 * 1024 * 1024';
 		$config['max_width'] 		= '1024';
 		$config['max_height']  		= '768';
 
@@ -48,16 +48,13 @@ class file extends MY_Controller
 		
 		if ( ! $this->upload->do_upload('file'))
 		{		
-			$error = array('error' => $this->upload->display_errors('<span class="error note">','</span>'));
+			$error = array('error' => $this->upload->display_errors('',''));
 		
-			echo htmlspecialchars(json_encode($error));
-			//echo json_encode($error);
+			echo json_encode($error);
 		}
 		else
 		{
-			$data = array('upload_data' => $this->upload->data());
-
-			echo json_encode($data);
+			echo json_encode($this->upload->data());
 		}						
 	}
 	
