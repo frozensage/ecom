@@ -10,14 +10,14 @@ class supplier extends MY_Controller
 		$this->rules = array
 		(
 			array(
-				'field'	=>	'supplier[supplier]',
-				'label'	=>	'Supplier',
-				'rules'	=>	'trim|required'
+				'field'	=> 'supplier[supplier]',
+				'label'	=> 'Supplier',
+				'rules'	=> 'trim|required'
 			),
 			array(
-				'field'	=>	'supplier[email]',
-				'label'	=>	'Email',
-				'rules'	=>	'trim|valid_email|required'
+				'field'	=> 'supplier[email]',
+				'label'	=> 'Email',
+				'rules'	=> 'trim|valid_email|required'
 			),
 		);
 	}
@@ -113,9 +113,7 @@ class supplier extends MY_Controller
 	{
 		if($this->input->post('submit'))
 		{
-			$this->load->library('form_validation');
 			$this->form_validation->set_rules($this->rules);
-			$this->form_validation->set_error_delimiters('<span class="error note">','</span>');
 						
 			if($this->form_validation->run()) // save
 			{

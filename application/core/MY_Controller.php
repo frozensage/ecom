@@ -11,11 +11,11 @@ class MY_Controller extends CI_Controller
 	
 		$this->data['css'] = array
 		(
-			'css/jquery-ui.css',
+			'css/ui/jquery-ui.css',
 			//'css/jquery.wysiwyg.css',
-			//'css/facebox.css',
 			//'css/visualize.css',
 			'css/date_input.css',
+			//'css/blueprint/screen.css',
 		 	'css/style.css',
 		);
 		
@@ -26,7 +26,6 @@ class MY_Controller extends CI_Controller
 			'jquery/jquery.ba-bbq.js',
 			'jquery/jquery.tmpl.min.js',
 		);
-		
 		
 		$this->data['nav'] = array
 		(
@@ -55,6 +54,9 @@ class MY_Controller extends CI_Controller
 		);
 		
 		$this->data['heading'] = 'Admin';
+		
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('<span class="error note">','</span>');
 		
 		if(!$this->session->userdata('backend')) // kick back to log in
 		{

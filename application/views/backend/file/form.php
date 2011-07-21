@@ -15,7 +15,7 @@
 
 <script class="img" type="text/x-jquery-tmpl">
 <li>
-	<img src="<?php echo base_url()?>uploads/${file_name}" width="120" height="120">
+	<img src="<?php echo base_url()?>uploads/${file_name}" alt="${file_name}" width="120" height="120">
 	<ul>
 		<li class="view">
 			<a href="<?php echo base_url()?>uploads/${file_name}" class="enlarge">View</a>
@@ -28,56 +28,79 @@
 </script>
 <script type="text/javascript">
 
-	// Style file input
-	$("input[type=file]").filestyle(
-	{ 
-	    image		: "<?php echo base_url() ?>images/upload.gif",
-	    imageheight : 30,
-	    imagewidth 	: 80,
-	    width 		: 250
-	});
+// Style file input
+$("input[type=file]").filestyle(
+{ 
+	image		: "<?php echo base_url() ?>images/upload.gif",
+	imageheight : 30,
+	imagewidth 	: 80,
+	width 		: 250
+});
 
-	new AjaxUpload('file', 
-	{
-		action			: '<?php echo site_url("file/commit")?>',
-		name			: 'file', // File upload name
-		autoSubmit		: true,
-		responseType	: "json",
-		onChange		: function(file, extension){},
-		onSubmit		: 
-				function(id, filename)
-				{
-					$('.note').remove();
-					$('.fileupload #uploadmsg').toggleClass('loading').text('Uploading...');
-				},
-		onComplete 		: 
-				function(filename, response) 
-				{					
-					$('.fileupload #uploadmsg').toggleClass('loading').text('Max size 3MB');
-					
-					if(response.error != null)
-					{
-						$('.fileupload').after($('<p class="error note no-left"/>').text(response.error));
-					}
-					else
-					{					
-						$('.imglist').append($('.img').tmpl(response).hide().fadeIn(500));
-					
-						$('.imglist a.enlarge').fancybox();
-					}
-				}
-	});
-	
-	$(window).bind('hashchange', function()
-	{		
-		$.post(
-			"<?php echo site_url('file/delete')?>", 
-			$.deparam.fragment(),
-			function(data)
-			{				
-				$('.imglist li img[src="'+data.path+data.filename+'"]').parents('li').fadeOut(500);
-			}, 
-			"json");
-	});
+new AjaxUpload('file', 
+{
+	action			: '<?php echo site_url("file/commit")?>',
+	name			: 'file', // File upload name
+	autoSubmit		: true,
+	responseType	: "json",
+	onChange		: function(file, extension){},
+	onSubmit		: 
+		function(id, filename)
+		{
+			$('.note').remove();
+			$('.fileupload #uploadmsg').toggleClass('loading').text('Uploading...');
+		},
+	onComplete 		: 
+		function(filename, response) 
+		{					
+			$('.fileupload #uploadmsg').toggleClass('loading').text('Max size 3MB');
+			
+			if(response.error != null)
+			{
+				$('.fileupload')
+					.after($('<p class="error note no-left"/>').text(response.error));
+			}
+			else
+			{					
+				$('.imglist').append($('.img').tmpl(response).hide().fadeIn(500));
+			
+				$('.imglist a.enlarge').fancybox();
+			}
+		}
+});
 
+$(window).bind('hashchange', function()
+{		
+	$.post(
+		"<?php echo site_url('file/delete')?>", 
+		$.deparam.fragment(),
+		function(response)
+		{
+			if(response.error != null)
+			{
+				$('.fileupload')
+					.after($('<p class="error note no-left"/>').text(response.error));
+			}
+			else
+			{
+				if (window.console) console.log(response);
+				
+				$('.imglist li img[alt="'+response.filename+'"]')
+					.parents('li').fadeOut(500);
+			}
+		}, 
+		"json");
+});
+
+// load the spinner when ajax is loading
+$('.fileupload #uploadmsg')
+.ajaxStart(function()
+{
+	//$('.note').remove();
+	$(this).toggleClass('loading').text('Uploading...');
+})
+.ajaxStop(function()
+{
+	$(this).toggleClass('loading').text('Max size 3MB');
+});
 </script>

@@ -1,6 +1,13 @@
 // JavaScript Document
 $(document).ready(function()
 {
+	
+	// Form select styling
+	if($("form select.styled").length)
+	{
+		$("form select.styled").select_skin();
+	}
+	
 	// Image actions menu
 	$('ul.imglist li').hover(
 		function() { $(this).find('ul').css('display', 'none').fadeIn('fast').css('display', 'block'); },

@@ -26,9 +26,16 @@ class MY_Model extends CI_Model
 	}
 
 	function create($data)
-	{
-		$this->db->set('updated', date('Y-m-d H:i:s', time()));
-		$this->db->set('created', date('Y-m-d H:i:s', time()));
+	{	
+		// add updated and created date to input data
+		$data['updated'] = $data['created'] = date('Y-m-d H:i:s', time());
+		
+		// get existing columns from the set table
+		$exist_columns = $this->db->list_fields($this->table);
+		
+		// filter out any columns that doesn't exist in the table from the input
+		$data = array_intersect_key($data, array_flip($exist_columns));
+	
 		$this->db->set($data);
 		
 		$this->db->insert($this->table);
@@ -37,15 +44,21 @@ class MY_Model extends CI_Model
 	}
 
 	function update($data)
-	{			
-		$this->db->set('updated', date('Y-m-d H:i:s', time()));		
+	{	
+		// add updated date to input data
+		$data['updated'] = date('Y-m-d H:i:s', time());
+		
+		// get existing columns from the set table
+		$exist_columns = $this->db->list_fields($this->table);
+		
+		// filter out any columns that doesn't exist in the table from the input
+		$data = array_intersect_key($data, array_flip($exist_columns));		
 		
 		return $this->db->update($this->table ,$data, $this->where);
 	}	
 	
 	function delete()
 	{
-		$this->where = $where;
 		$this->db->delete($this->table, $this->where);
 	}
 	
@@ -60,7 +73,8 @@ class MY_Model extends CI_Model
 		{
 			foreach($this->join as $table=>$where)
 			{
-				$this->db->join($table, $where); // ie: $this->db->join('comments', 'comments.id = blogs.id');
+				// ie: $this->db->join('comments', 'comments.id = blogs.id');
+				$this->db->join($table, $where); 
 			}
 		}
 		
