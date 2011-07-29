@@ -54,16 +54,6 @@ class Taxonomy extends MY_Controller
 			show_404();
 			return;
 		}
-	
-		// default values
-		$this->data['values'] = array(
-			"term"	=> array(
-				"id" 			=> '',
-				"term" 			=> '',
-				"description"	=> '',
-				"vocabulary_id"	=> '',
-			)
-		);
 		
 		$this->form_validation->set_rules($this->rules);
 	
@@ -71,38 +61,27 @@ class Taxonomy extends MY_Controller
 		{
 			/******** start add ********/
 			case "add":
+						
+			// check vocabulary id is valid			
+			$this->vocabulary->set_where(array('id'=>$id));
+			$query = $this->vocabulary->get();
 			
-			// check vocabulary id is valid	
-			$query = $this->vocabulary->get(array('id'=>$id));
-				
-			if(!$query->row())
+			if($query->num_rows<1)
 			{
 				show_404();
 				return;
 			}
-			
-			$this->data['values']['term']['vocabulary_id'] = $id;
-			
+							
+			$this->data['vid'] = $id;
 			$this->data['action'] = site_url("taxonomy/term/$perform/$id");	
 			
 			// perform validation
 			if ($this->form_validation->run()) // validation success
 			{
-				if($this->term->save($_POST)) //save successful
+				if($this->term->create($this->input->post('term'))) //save successful
 				{
 					redirect("taxonomy/vocabulary/$id");
-				}
-				else //save failed
-				{
-					$this->data['values'] = $_POST; // repopulate with submitted data
-				}				
-			}
-			else // validation failed
-			{
-				if($_POST) // repopulate with submitted data
-				{
-					$this->data['values'] = $_POST;
-				}
+				}			
 			}
 			
 			break;
@@ -121,37 +100,22 @@ class Taxonomy extends MY_Controller
 				return;
 			}
 			
-			$this->data['saved'] = $query->row();	
+			$this->data['saved'] = $term = $query->row();	
 			$this->data['action'] = site_url("taxonomy/term/$perform/$id");	
 			
 			// perform validation
 			if ($this->form_validation->run()) // validation success
-			{
-				if($this->term->save($_POST)) //save successful
+			{				
+				if($this->term->update($this->input->post('term'))) //save successful
 				{
 					redirect("taxonomy/vocabulary/$term->vocabulary_id");
 				}
-				else //save failed
-				{
-				//	$this->data['values'] = $_POST; // repopulate with submitted data
-				}
-			}
-			else // validation failed
-			{
-			/*	if($_POST) // repopulate with submitted data
-				{
-					$this->data['values'] = $_POST;
-				}
-				else
-				{
-					$this->data['values']['term'] = (array) $term;
-				}*/
 			}
 			
 			break;
 			/******** end edit ********/
 		}
-				
+		
 		$this->load_template('taxonomy/term');
 		
 	}

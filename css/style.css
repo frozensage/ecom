@@ -630,8 +630,8 @@ a:hover {
 	}
 
 .block form input.text.medium { width: 600px; }
-.block form input.text.small { width: 20%; }
-.block form input.text.tiny { width: 5%; }
+.block form input.text.small { width: 50%; }
+.block form input.text.tiny { width: 10%; }
 .block form input.text.big { width: 98%; }
 
 .block form input.text.date_picker {
@@ -1015,5 +1015,39 @@ a:hover {
 	float:left;
 	margin:2px 10px;
 	cursor:pointer;
+}
+
+table.extras
+{
+	margin-bottom:5px;
+}
+
+table.extras td
+{
+	vertical-align:top;
+}
+
+table.extras .error
+{
+	display:block;
+	padding:0;
+	margin-top:5px;
+}
+
+.column
+{
+	float:left;
+	margin-right:10px;
+}
+
+.column.last
+{
+	margin-right:0;
+}
+
+.row
+{
+	overflow:hidden;
+	margin-bottom:10px;
 }
 		

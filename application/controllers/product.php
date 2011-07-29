@@ -5,6 +5,18 @@ class product extends MY_Controller
 	function __construct()
 	{
 		parent::__construct();
+		
+		$this->data['js'][] 	= 'jquery/jquery.filestyle.mini.js';
+		$this->data['js'][] 	= 'jquery/jquery.select_skin.js';
+		$this->data['js'][] 	= 'jquery/fancybox/jquery.fancybox-1.3.4.pack.js';
+		$this->data['js'][] 	= 'jquery/fancybox/jquery.easing-1.3.pack.js';
+		$this->data['js'][] 	= 'ajaxupload.js';
+
+		$this->data['css'][] 	= 'js/jquery/fancybox/jquery.fancybox-1.3.4.css';
+
+		$this->_taxonomy_terms();
+		$this->_suppliers();
+		$this->_locations();
 	}
 	
 	function index()
@@ -17,57 +29,11 @@ class product extends MY_Controller
 	
 	function create($type='standalone')
 	{
-		$this->data['js'][] 	= 'jquery/jquery.filestyle.mini.js';
-		$this->data['js'][] 	= 'jquery/jquery.select_skin.js';
-		$this->data['js'][] 	= 'jquery/fancybox/jquery.fancybox-1.3.4.pack.js';
-		$this->data['js'][] 	= 'jquery/fancybox/jquery.easing-1.3.pack.js';
-		$this->data['js'][] 	= 'ajaxupload.js';
-
-		$this->data['css'][] 	= 'js/jquery/fancybox/jquery.fancybox-1.3.4.css';
-		
+				
 		$this->data['action'] = site_url("admin/product/add/$type");
 		$this->data['type'] = $type;		
 		
-		$this->data['heading'] 	= 'Upload file(s)';
-
-			
-		// remove the last item in a list (ie: ...[0])
-	/*	unset($_POST['options'][0]);
-		unset($_POST['delivery_schedules'][0]);
-
-		$f_val = $this->f_val;
-		$rules = $this->_form_rules();
-		$f_val->set_rules($rules);
-
-		if ($f_val->run())
-		{
-			$this->product->save($_POST);
-			redirect('admin/product#order_by=created&direction=desc');
-		}
-		
-		// re populate with data submitted
-		if($_POST) 
-		{			
-			$this->data['values'] = $_POST;
-		
-			if(!$this->input->post('term_id'))
-				$this->data['values']['term_id'] = array();
-				
-			if(!$this->input->post('options'))
-				$this->data['values']['options'] = array();	
-				
-			if(!$this->input->post('delivery_schedule'))
-				$this->data['values']['delivery_schedules'] = array();	
-		}
-		
-		$this->_taxonomy_terms();
-		$this->_locations();
-		*/
-		
-		$this->_taxonomy_terms();
-		//$this->_locations();
-		$this->_suppliers();
-		
+		$this->data['heading'] 	= 'Create product';
 		
 		$this->load_template('product/form');
 	}
@@ -75,6 +41,36 @@ class product extends MY_Controller
 	function edit($id=null,$type='standalone')
 	{
 		
+	}
+	
+	function save()
+	{
+		if($this->input->post('submit'))
+		{
+			$options = $this->input->post('options');
+			$delivery_schedules = $this->input->post('delivery_schedules');
+					
+			foreach($options as $index=>$option)
+			{
+				if($option['option'] or $option['price'])
+				{
+					$this->form_validation->set_rules("options[$index][option]",'Option','required');
+					$this->form_validation->set_rules("options[$index][price]",'Price','required|numeric');
+				}
+			}
+			
+			if($this->form_validation->run()) // save
+			{
+				redirect('product');
+			}
+			else
+			{
+				$this->data['type']			= $this->input->post('product[type]');
+				$this->data['has_error']	= true;
+			}
+			
+			$this->load_template('product/form');	
+		}
 	}
 	
 	function _taxonomy_terms()
@@ -85,7 +81,7 @@ class product extends MY_Controller
 			array('tbl_vocabularies'=>'tbl_vocabularies.id=tbl_terms.vocabulary_id'));
 		$this->term->set_order_by(array('order'=>'asc'));
 		
-		$vocabularies = array(1,2,3,4,5);
+		$vocabularies = array(1,2,3,4,5,6);
 							
 		foreach($vocabularies as $id)
 		{
@@ -117,6 +113,8 @@ class product extends MY_Controller
 	
 	function _locations()
 	{
+		$this->load->model('location_model','location');
+
 		$this->data['locations'][''] = '-- Please Select --';
 	
 		$locations = $this->location->get();

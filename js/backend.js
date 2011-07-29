@@ -74,12 +74,22 @@ $(document).ready(function()
 		$(window).trigger("hashchange");		
 	}
 		
-	$("a.back_btn").click(function()
+	$(".back_btn").click(function()
 	{
 		history.go(-1);
 		
 		return false;
 	});
+	
+	// add/remove items
+	//$('.add_item').bind('click',add_item);
+	$('a.remove_item').live('click',function()
+	{
+		$(this).parents('tr').remove();
+	
+		return false;
+	});
+		
 });
 
 function pagination(data, selector)
@@ -119,4 +129,47 @@ function pagination(data, selector)
 		$.bbq.removeState('current_page');
 	}
 	
-}		
+}
+
+
+/*
+|---------------------------------------------------------------
+| add_item()
+|---------------------------------------------------------------
+|
+| Duplicate the last item in the list
+| Replace the last item's name ...[0] to the new index, 
+| Replace the "add" link with "remove" link in the last item
+| Clear the cloned item's fields
+| Add the cloned item to after the last item, thus becoming the new last item
+|
+*/
+function add_item()
+{	
+	var row = $(this).parents('tr');
+
+	var objIndex = $(this).parents('table').find('.index');
+	var cloned = row.clone(true);
+	var new_index = parseInt(objIndex.val())+1;
+
+	objIndex.val(new_index); //update the index
+	
+	row.find('td:last a').replaceWith('<a href="#" class="remove_item">remove</a>');
+	row.find('a.remove_item').bind('click',remove_item);
+	row.find('input, select').each(function()
+	{
+		$(this).attr('name', $(this).attr('name').replace(0,new_index));
+	});
+
+	//cloned.find('input, select').clearInputs();
+	row.after(cloned);
+	
+	return false;
+}
+
+function remove_item()
+{
+	$(this).parents('tr').remove();
+	
+	return false;
+}	

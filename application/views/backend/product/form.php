@@ -1,5 +1,9 @@
 
-<?php echo form_open('user/create_submit')?>
+<?php echo form_open('product/save')?>
+
+<?php echo form_hidden('id', set_value('id', isset($saved)?$saved->id:''));?>
+<?php echo form_hidden('product[type]', strcmp($type,'associated')?'Standalone':'Associated')?>
+
 <p>
     <label for="name">Product name<span class="mustfill">*</span></label><br/>
     <?php echo form_input('product[product]', set_value('product[product]'), 'id="name" class="text large"') ?>
@@ -44,76 +48,66 @@
 <?php if(strcmp($type,'associated')<>0): // show below fields if standalone product ?>
 	<p>
 		<label for="was">Was ($)</label><br/>
-		<input id="was" type="text" name="product[was]" class="text price"
-			value="<?php echo $values['product']['was']; ?>" />
-		<?php echo form_error('product[was]')?>			
+        <?php echo form_input('product[was]', set_value('product[was]'), 'id="price" class="text tiny"') ?>
+    	<?php echo form_error('product[was]')?>		
 	</p>
 	<?php foreach($taxonomy as $vocabulary=>$terms): ?>
 		<p>
 			<label><?php echo $vocabulary?></label>
 			<?php foreach($terms as $id=>$term): ?>
 				<br/>
-				<?php echo form_checkbox("term_id[]", $id, in_array($id, $values['term_id']));?>
+				<?php echo form_checkbox("term_id[]", $id);?>
 				<?php echo $term?>
 			<?php endforeach ?>
 			<?php echo form_error("term_id[]")?>		
 		</p>
 	<?php endforeach ?>
-
-	<p>
-		<label>Status</label>
-		<br/>
-		<?php echo form_checkbox("product[active]", "Yes", 
-			isset($values['product']['active'])&&strcmp($values['product']['active'],"Yes")==0) ?>
-		active
-		<br/>
-		<?php echo form_checkbox("product[out_of_stock]", "Yes", 
-			isset($values['product']['out_of_stock'])&&strcmp($values['product']['out_of_stock'],"Yes")==0) ?> 
-		out of stock
-	</p>
 	
-	<?php /*echo form_fieldset('Options') ?>
-		
-		<!-- options -->
-		<?php $i=0; ?>
-		<?php foreach($values['options'] as $index=>$option): ?>
-		<?php $i++; ?>
-			
-			<div class="row clearfix">
-				<div class="column">
-					<label>Name<span class="mustfill">*</span></label>
-					<br/>
-					<input name="options[<?=$i?>][option]" value="<?=$option['option']?>" class="text medium required" /></div>
-				<div class="column">
-					<label>Extra<span class="mustfill">*</span></label>
-					<br/>
-					<input name="options[<?=$i?>][price]" value="<?=$option['price']?>" class="text price required" /></div>
-				<div class="column last">
-					<br/>
-					<a href="#" class="remove_item">remove</a></div>
-			</div>
-			
-		<?php endforeach ?>
-		
-		<div class="row clearfix">
-			<div class="column">
-				<label>Name<span class="mustfill">*</span></label>
-				<br/>
-				<input name="options[0][option]" class="text medium required" /></div>
-			<div class="column">
-				<label>Extra ($)<span class="mustfill">*</span></label>
-				<br/>
-				<input name="options[0][price]" class="text price required" /></div>
-			<div class="column last">
-				<br/><a href="#" class="add_item">add</a></div>
-		</div>
-		
-		<input type="hidden" id="option_index" class="index" value=<?=$i?> />
-		<!-- options end -->
-
-	<?php echo form_fieldset_close() ?>
-	
-	<?php echo form_fieldset('Delivery schedule') ?>
+    <!-- options -->
+   
+    <hr />
+    
+    <table cellpadding="0" cellspacing="0" class="extras" id="options">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th colspan="2">Price ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+        	<?php $i=0; ?>
+			<?php if($options = $this->input->post('options')) : ?>
+				<?php foreach($options as $index=>$option): ?>
+                <tr>
+                    <td> 
+                        <?php echo form_input("options[$i][option]", set_value("options[$index][option]"), 'class="text"')?><br/>
+                        <?php echo form_error("options[$index][option]")?>
+                    </td>
+                    <td>
+                        <?php echo form_input("options[$i][price]", set_value("options[$index][price]"), 'class="small text"')?><br/>
+                        <?php echo form_error("options[$index][price]")?>
+                    </td>
+                    <td><a href="#" class="remove_this">Remove</a></td>
+                </tr>
+                <?php $i++; ?>
+                <?php endforeach ?>
+            <?php endif ?>
+        	<tr>
+                <td> 
+                    <?php echo form_input("options[$i][option]",'','class="text"')?>
+                </td>
+                <td>
+                    <?php echo form_input("options[$i][price]",'','class="small text"')?>
+                </td>
+                <td><a href="#" class="add_item">Add</a></td>
+            </tr>
+        </tbody>
+        <input type="hidden" class="index" value="<?php echo $i?>" />
+    </table>
+   	
+    <!-- options end -->
+    
+	<?php /* ?>
 
 	<!-- delivery schedule -->	
 	<?php $j=0; ?>
@@ -150,53 +144,87 @@
 			</div>
 		</div>
 		
-	<?php endforeach ?>
+	<?php endforeach */?>
 	
-	<div class="row clearfix last">
-		<div class="column">
-			<label>Location<span class="mustfill">*</span></label><br/>
-			<?php echo form_dropdown("delivery_schedules[0][location_id]",$locations, '', array('class'=>"required"))?>
-		</div>
-		<div class="column">
-			<label>Description<span class="mustfill">*</span></label><br/>
-			<input name="delivery_schedules[0][description]" class="text medium required" />
-		</div>
-		<div class="column">
-			<label>Price ($)<span class="mustfill">*</span></label><br/>
-			<input name="delivery_schedules[0][price]" class="text price required" />
-		</div>
-		<div class="column">
-			<label>Same day</label><br/>
-			<?php echo form_checkbox("delivery_schedules[$j][same_day]", 'Yes');?>
-		</div>
-		<div class="column">
-			<label>Call for quote</label><br/>
-			<input name="delivery_schedules[0][call_for_quote]" type="checkbox" value="Yes"/>
-		</div>
-		<div class="column">
-			<label>Note</label><br/>
-			<input name="delivery_schedules[0][note]" class="text medium" />
-		</div>
-		<div class="column last">
-			<br/><a href="#" class="add_item">add</a>
-		</div>
-	</div>
-	<?php */ ?>
+    <hr />
     
-	<input type="hidden" id="delivery_schedules_index" class="index" value=<?=$j?> />
-	<!-- delivery schedule end -->
+    <table cellpadding="0" cellspacing="0" class="extras" id="delivery_schedules">
+    	<thead>
+        	<tr>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Price ($)</th>
+                <th>Same day</th>
+                <th>Call for quote</th>
+                <th colspan="2">Note</th>
+            </tr>
+		</thead>
+        <tbody>
+			<?php if($delivery_scheules = $this->input->post('delivery_schedules')): ?>
+                
+                <?php $i = 1; ?>
+                
+                <?php foreach($delivery_scheules as $delivery_schedule): ?>
+                <tr>
+                    <td>
+                        <?php echo form_dropdown("delivery_schedules[$i][location_id]", $locations, '', 'id="location_id" class="styled"');?>
+                    </td>
+                    <td>
+                        <?php echo form_input("delivery_schedules[$i][description]", set_value("delivery_schedules[$i][description]"), 'class="text"')?><br/>
+                        <?php echo form_error("delivery_schedules[$i][description]")?>
+                    </td>
+                    <td>
+                        <?php echo form_input("delivery_schedules[$i][price]", set_value("delivery_schedules[$i][price]"), 'class="text small"')?><br/>
+                        <?php echo form_error("delivery_schedules[$i][price]")?>
+                    </td>
+                    <td>
+                        <?php echo form_checkbox("delivery_schedules[$i][same_day]", 'Yes', set_value("delivery_schedules[$i][same_day]"), 'class="checkbox"');?>
+                    </td>
+                    <td>
+                        <?php echo form_checkbox("delivery_schedules[$i][call_for_quote]", 'Yes', set_value("delivery_schedules[$i][call_for_quote]"), 'class="checkbox"')?>
+                    </td>
+                    <td>
+                        <?php echo form_input("delivery_schedules[$i][note]", set_value("delivery_schedules[$i][note]"), 'class="text"')?>
+                    </td>
+                    <td><a href="#" class="remove_item">Remove</a></td>
+                </tr>	
+                <?php endforeach ?>
+            <?php endif ?>
+        	<tr>
+            	<td>
+               		<?php echo form_dropdown('delivery_schedules[0][location_id]', $locations, '', 'id="location_id" class="styled"');?>
+                </td>
+                <td>
+					<?php echo form_input('delivery_schedules[0][description]', set_value('delivery_schedules[0][description]'), 'class="text"')?><br/>
+                </td>
+                <td>
+                	<?php echo form_input('delivery_schedules[0][price]', set_value('delivery_schedules[0][price]'), 'class="text small"')?><br/>
+                </td>
+                <td>
+                	<?php echo form_checkbox("delivery_schedules[0][same_day]", 'Yes', set_value('delivery_schedules[0][same_day]'), 'class="checkbox"');?>
+                </td>
+                <td>
+                	<?php echo form_checkbox('delivery_schedules[0][call_for_quote]', 'Yes', set_value('delivery_schedules[0][call_for_quote]'), 'class="checkbox"')?>
+                </td>
+                <td>
+                	<?php echo form_input('delivery_schedules[0][note]', set_value('delivery_schedules[0][note]'), 'class="text"')?>
+                </td>
+                <td></td>
+        	</tr>
+        </tbody>
+    </table>
+    
+    <p><a href="#" class="add_schedule">add another</a></p>
+	
+    <!-- delivery schedule end -->
 
 <?php endif //associated ?>
 
-
+<hr/>
 
 <p>
     <?php echo form_submit('submit','Save', 'class="submit"')?>
 </p>
-
-<?php echo form_hidden('product[type]', strcmp($type,'associated')?'Standalone':'Associated')?>
-
-<?php echo form_hidden('product[id]', set_value('product[id]'));?>
 
 <?php echo form_close()?>
 
@@ -213,7 +241,10 @@
 	</ul>
 </li>
 </script>
+			
 <script type="text/javascript">
+
+$('a.add_item').click(add_item);
 
 // Style file input
 $("input[type=file]").filestyle(
@@ -224,6 +255,7 @@ $("input[type=file]").filestyle(
 	width 		: 250
 });
 
+// AJAX file upload
 new AjaxUpload('file', 
 {
 	action			: '<?php echo site_url("file/commit")?>',
@@ -256,6 +288,7 @@ new AjaxUpload('file',
 		}
 });
 
+// AJAX file delete
 $(window).bind('hashchange', function()
 {		
 	$.post(
@@ -290,4 +323,5 @@ $('.fileupload #uploadmsg')
 	{
 		$(this).toggleClass('loading').text('Max size 3MB');
 	});
+	
 </script>

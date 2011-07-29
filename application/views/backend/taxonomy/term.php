@@ -1,6 +1,6 @@
 <?php echo form_open($action)?>
 <?php echo form_hidden('id', set_value('id', isset($saved)?$saved->id:''));?>
-<?php echo form_hidden('term[vocabulary_id]',set_value('term[vocabulary_id]',isset($saved)?$saved->vocabulary_id:''));?>
+<?php echo form_hidden('term[vocabulary_id]',set_value('term[vocabulary_id]',isset($saved)?$saved->vocabulary_id:$vid));?>
 
 <p>
 <label for="term">Term<span class="mustfill">*</span></label><br/>

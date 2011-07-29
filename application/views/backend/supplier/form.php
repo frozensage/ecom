@@ -16,7 +16,7 @@
     <?php echo form_input('supplier[phone]', set_value('supplier[phone]', isset($saved)?$saved->phone:''), 'id="phone" class="text small"') ?>
     <?php echo form_error('supplier[phone]')?>
 </p>
-
+<hr/>
 <p>
     <?php echo form_submit('submit','Save', 'class="submit"')?> <a href="#" class="back_btn">Go back</a>
 </p>
